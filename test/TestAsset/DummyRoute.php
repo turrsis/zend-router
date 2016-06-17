@@ -8,7 +8,7 @@
 namespace ZendTest\Router\TestAsset;
 
 use Zend\Router\RouteInterface;
-use Zend\Router\RouteMatch;
+use Zend\Router\Http\RouteMatch;
 use Zend\Stdlib\RequestInterface;
 
 /**
@@ -51,4 +51,9 @@ class DummyRoute implements RouteInterface
     {
         return new static();
     }
+
+    public function getAssembledParams() {
+        return [];
+    }
+
 }

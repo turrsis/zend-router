@@ -15,7 +15,7 @@ use Zend\Stdlib\RequestInterface as Request;
 /**
  * Hostname route.
  */
-class Hostname implements RouteInterface
+class Hostname extends AbstractRoute
 {
     /**
      * Parts of the route.
@@ -37,20 +37,6 @@ class Hostname implements RouteInterface
      * @var array
      */
     protected $paramMap = [];
-
-    /**
-     * Default values.
-     *
-     * @var array
-     */
-    protected $defaults;
-
-    /**
-     * List of assembled parameters.
-     *
-     * @var array
-     */
-    protected $assembledParams = [];
 
     /**
      * Create a new hostname route.
@@ -329,16 +315,5 @@ class Hostname implements RouteInterface
 
         // A hostname does not contribute to the path, thus nothing is returned.
         return '';
-    }
-
-    /**
-     * getAssembledParams(): defined by RouteInterface interface.
-     *
-     * @see    RouteInterface::getAssembledParams
-     * @return array
-     */
-    public function getAssembledParams()
-    {
-        return $this->assembledParams;
     }
 }

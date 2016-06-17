@@ -15,7 +15,7 @@ use Zend\Stdlib\RequestInterface as Request;
 /**
  * Scheme route.
  */
-class Scheme implements RouteInterface
+class Scheme extends AbstractRoute
 {
     /**
      * Scheme to match.
@@ -23,13 +23,6 @@ class Scheme implements RouteInterface
      * @var string
      */
     protected $scheme;
-
-    /**
-     * Default values.
-     *
-     * @var array
-     */
-    protected $defaults;
 
     /**
      * Create a new scheme route.
@@ -112,16 +105,5 @@ class Scheme implements RouteInterface
 
         // A scheme does not contribute to the path, thus nothing is returned.
         return '';
-    }
-
-    /**
-     * getAssembledParams(): defined by RouteInterface interface.
-     *
-     * @see    RouteInterface::getAssembledParams
-     * @return array
-     */
-    public function getAssembledParams()
-    {
-        return [];
     }
 }

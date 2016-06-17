@@ -15,7 +15,7 @@ use Zend\Stdlib\RequestInterface as Request;
 /**
  * Wildcard route.
  */
-class Wildcard implements RouteInterface
+class Wildcard extends AbstractRoute
 {
     /**
      * Delimiter between keys and values.
@@ -30,20 +30,6 @@ class Wildcard implements RouteInterface
      * @var array
      */
     protected $paramDelimiter;
-
-    /**
-     * Default values.
-     *
-     * @var array
-     */
-    protected $defaults;
-
-    /**
-     * List of assembled parameters.
-     *
-     * @var array
-     */
-    protected $assembledParams = [];
 
     /**
      * Create a new wildcard route.
@@ -173,16 +159,5 @@ class Wildcard implements RouteInterface
         }
 
         return '';
-    }
-
-    /**
-     * getAssembledParams(): defined by RouteInterface interface.
-     *
-     * @see    RouteInterface::getAssembledParams
-     * @return array
-     */
-    public function getAssembledParams()
-    {
-        return $this->assembledParams;
     }
 }

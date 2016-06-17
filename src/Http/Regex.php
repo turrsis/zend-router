@@ -11,11 +11,12 @@ use Traversable;
 use Zend\Router\Exception;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\RequestInterface as Request;
+use Zend\Router\RouteInterface;
 
 /**
  * Regex route.
  */
-class Regex implements RouteInterface
+class Regex extends AbstractRoute
 {
     /**
      * Regex to match.
@@ -25,13 +26,6 @@ class Regex implements RouteInterface
     protected $regex;
 
     /**
-     * Default values.
-     *
-     * @var array
-     */
-    protected $defaults;
-
-    /**
      * Specification for URL assembly.
      *
      * Parameters accepting substitutions should be denoted as "%key%"
@@ -39,13 +33,6 @@ class Regex implements RouteInterface
      * @var string
      */
     protected $spec;
-
-    /**
-     * List of assembled parameters.
-     *
-     * @var array
-     */
-    protected $assembledParams = [];
 
     /**
      * Create a new regex route.
@@ -159,16 +146,5 @@ class Regex implements RouteInterface
         }
 
         return $url;
-    }
-
-    /**
-     * getAssembledParams(): defined by RouteInterface interface.
-     *
-     * @see    RouteInterface::getAssembledParams
-     * @return array
-     */
-    public function getAssembledParams()
-    {
-        return $this->assembledParams;
     }
 }

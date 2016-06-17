@@ -45,4 +45,11 @@ interface RouteInterface
      * @return mixed
      */
     public function assemble(array $params = [], array $options = []);
+
+    /**
+     * Get a list of parameters used while assembling.
+     *
+     * @return array
+     */
+    public function getAssembledParams();
 }

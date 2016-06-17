@@ -9,9 +9,8 @@ namespace ZendTest\Router;
 
 use Interop\Container\ContainerInterface;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\Router\Http\HttpRouterFactory;
-use Zend\Router\RoutePluginManager;
 use Zend\Router\RouterFactory;
+use Zend\Router\RoutePluginManager;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
@@ -21,7 +20,7 @@ class RouterFactoryTest extends TestCase
     {
         $this->defaultServiceConfig = [
             'factories' => [
-                'HttpRouter'         => HttpRouterFactory::class,
+                'HttpRouter'         => RouterFactory::class,
                 'RoutePluginManager' => function ($services) {
                     return new RoutePluginManager($services);
                 },

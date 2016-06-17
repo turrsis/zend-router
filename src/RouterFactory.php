@@ -25,7 +25,27 @@ class RouterFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $name, array $options = null)
     {
-        return $container->get('HttpRouter');
+        $config = [];
+        if ($container->has('config')) {
+            $config = $container->get('config');
+            $config = isset($config['router']) ? $config['router'] : [];
+        }
+
+        // Obtain the configured router class, if any
+        $class  = RootRouteStack::class;
+        if (isset($config['router_class']) && class_exists($config['router_class'])) {
+            $class = $config['router_class'];
+        }
+
+        // Inject the route plugins
+        if (! isset($config['route_plugins'])) {
+            $routePluginManager = $container->get('RoutePluginManager');
+            $config['route_plugins'] = $routePluginManager;
+        }
+
+        // Obtain an instance
+        $factory = sprintf('%s::factory', $class);
+        return call_user_func($factory, $config);
     }
 
     /**

@@ -15,7 +15,7 @@ use Zend\Stdlib\RequestInterface as Request;
 /**
  * Literal route.
  */
-class Literal implements RouteInterface
+class Literal extends AbstractRoute
 {
     /**
      * RouteInterface to match.
@@ -23,13 +23,6 @@ class Literal implements RouteInterface
      * @var string
      */
     protected $route;
-
-    /**
-     * Default values.
-     *
-     * @var array
-     */
-    protected $defaults;
 
     /**
      * Create a new literal route.
@@ -118,16 +111,5 @@ class Literal implements RouteInterface
     public function assemble(array $params = [], array $options = [])
     {
         return $this->route;
-    }
-
-    /**
-     * getAssembledParams(): defined by RouteInterface interface.
-     *
-     * @see    RouteInterface::getAssembledParams
-     * @return array
-     */
-    public function getAssembledParams()
-    {
-        return [];
     }
 }

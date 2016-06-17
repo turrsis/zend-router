@@ -15,7 +15,7 @@ use Zend\Stdlib\RequestInterface as Request;
 /**
  * Method route.
  */
-class Method implements RouteInterface
+class Method extends AbstractRoute
 {
     /**
      * Verb to match.
@@ -23,13 +23,6 @@ class Method implements RouteInterface
      * @var string
      */
     protected $verb;
-
-    /**
-     * Default values.
-     *
-     * @var array
-     */
-    protected $defaults;
 
     /**
      * Create a new method route.
@@ -109,16 +102,5 @@ class Method implements RouteInterface
     {
         // The request method does not contribute to the path, thus nothing is returned.
         return '';
-    }
-
-    /**
-     * getAssembledParams(): defined by RouteInterface interface.
-     *
-     * @see    RouteInterface::getAssembledParams
-     * @return array
-     */
-    public function getAssembledParams()
-    {
-        return [];
     }
 }

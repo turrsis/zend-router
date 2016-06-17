@@ -45,6 +45,11 @@ class RoutePluginManager extends AbstractPluginManager
     protected $sharedByDefault = false;
 
     /**
+     * @var RoutePrototypesFactory
+     */
+    protected $prototypesFactory;
+
+    /**
      * Constructor
      *
      * Ensure that the instance is seeded with the RouteInvokableFactory as an
@@ -56,7 +61,66 @@ class RoutePluginManager extends AbstractPluginManager
     public function __construct($configOrContainerInstance, array $v3config = [])
     {
         $this->addAbstractFactory(RouteInvokableFactory::class);
+        $this->prototypesFactory = new RoutePrototypesFactory($this);
+
+        $v3config = array_merge_recursive([
+            'aliases' => [
+                'chain'    => Http\Chain::class,
+                'Chain'    => Http\Chain::class,
+                'hostname' => Http\Hostname::class,
+                'Hostname' => Http\Hostname::class,
+                'hostName' => Http\Hostname::class,
+                'HostName' => Http\Hostname::class,
+                'literal'  => Http\Literal::class,
+                'Literal'  => Http\Literal::class,
+                'method'   => Http\Method::class,
+                'Method'   => Http\Method::class,
+                'part'     => Http\Part::class,
+                'Part'     => Http\Part::class,
+                'regex'    => Http\Regex::class,
+                'Regex'    => Http\Regex::class,
+                'scheme'   => Http\Scheme::class,
+                'Scheme'   => Http\Scheme::class,
+                'segment'  => Http\Segment::class,
+                'Segment'  => Http\Segment::class,
+                'wildcard' => Http\Wildcard::class,
+                'Wildcard' => Http\Wildcard::class,
+                'wildCard' => Http\Wildcard::class,
+                'WildCard' => Http\Wildcard::class,
+            ],
+            'factories' => [
+                Http\Chain::class    => RouteInvokableFactory::class,
+                Http\Hostname::class => RouteInvokableFactory::class,
+                Http\Literal::class  => RouteInvokableFactory::class,
+                Http\Method::class   => RouteInvokableFactory::class,
+                Http\Part::class     => RouteInvokableFactory::class,
+                Http\Regex::class    => RouteInvokableFactory::class,
+                Http\Scheme::class   => RouteInvokableFactory::class,
+                Http\Segment::class  => RouteInvokableFactory::class,
+                Http\Wildcard::class => RouteInvokableFactory::class,
+
+                // v2 normalized names
+
+                'zendmvcrouterhttpchain'    => RouteInvokableFactory::class,
+                'zendmvcrouterhttphostname' => RouteInvokableFactory::class,
+                'zendmvcrouterhttpliteral'  => RouteInvokableFactory::class,
+                'zendmvcrouterhttpmethod'   => RouteInvokableFactory::class,
+                'zendmvcrouterhttppart'     => RouteInvokableFactory::class,
+                'zendmvcrouterhttpregex'    => RouteInvokableFactory::class,
+                'zendmvcrouterhttpscheme'   => RouteInvokableFactory::class,
+                'zendmvcrouterhttpsegment'  => RouteInvokableFactory::class,
+                'zendmvcrouterhttpwildcard' => RouteInvokableFactory::class,
+            ],
+        ], $v3config);
+
         parent::__construct($configOrContainerInstance, $v3config);
+    }
+
+    public function setPrototype($name, $service)
+    {
+        $this->prototypesFactory->setPrototype($name, $service);
+        $this->setShared($name, true);
+        $this->setFactory($name, $this->prototypesFactory);
     }
 
     /**
@@ -122,6 +186,12 @@ class RoutePluginManager extends AbstractPluginManager
                 : $factories;
 
             unset($config['invokables']);
+        }
+        if (isset($config['prototypes'])) {
+            foreach($config['prototypes'] as $name => $prototype) {
+                $this->setPrototype($name, $prototype);
+            }
+            unset($config['prototypes']);
         }
 
         parent::configure($config);

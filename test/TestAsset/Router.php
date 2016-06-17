@@ -85,4 +85,48 @@ class Router implements RouteStackInterface
     public function setRoutes($routes)
     {
     }
+
+    public function addChain($name, $route, $priority = null)
+    {
+    }
+
+    public function addChains($routes)
+    {
+    }
+
+    public function getAssembledParams()
+    {
+    }
+
+    public function getChain($name)
+    {
+    }
+
+    public function getChains()
+    {
+    }
+
+    public function getRouter()
+    {
+    }
+
+    public function removeChain($name)
+    {
+    }
+
+    public function setChains($routes)
+    {
+    }
+
+    public function setRouter($route)
+    {
+    }
+
+    public function getRoute($name)
+    {
+    }
+
+    public function getRoutes()
+    {
+    }
 }

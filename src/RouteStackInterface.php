@@ -10,6 +10,17 @@ namespace Zend\Router;
 interface RouteStackInterface extends RouteInterface
 {
     /**
+     * @return RouteInterface
+     */
+    public function getRouter();
+
+    /**
+     * @param RouteInterface|Traversable|array|string $route
+     * @return self
+     */
+    public function setRouter($route);
+
+    /**
      * Add a route to the stack.
      *
      * @param  string  $name
@@ -42,4 +53,22 @@ interface RouteStackInterface extends RouteInterface
      * @return RouteStackInterface
      */
     public function setRoutes($routes);
+
+    /**
+     * @return PriorityList
+     */
+    public function getRoutes();
+
+    /**
+     * @param string $name
+     * @return RouteInterface
+     */
+    public function getRoute($name);
+
+    public function setChains($routes);
+    public function addChains($routes);
+    public function addChain($name, $route, $priority = null);
+    public function removeChain($name);
+    public function getChain($name);
+    public function getChains();
 }

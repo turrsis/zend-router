@@ -16,7 +16,7 @@ use Zend\Stdlib\RequestInterface as Request;
 /**
  * Segment route.
  */
-class Segment implements RouteInterface
+class Segment extends AbstractRoute
 {
     /**
      * Cache for the encode output.
@@ -77,20 +77,6 @@ class Segment implements RouteInterface
      * @var array
      */
     protected $paramMap = [];
-
-    /**
-     * Default values.
-     *
-     * @var array
-     */
-    protected $defaults;
-
-    /**
-     * List of assembled parameters.
-     *
-     * @var array
-     */
-    protected $assembledParams = [];
 
     /**
      * Translation keys used in the regex.
@@ -422,17 +408,6 @@ class Segment implements RouteInterface
             (isset($options['has_child']) ? $options['has_child'] : false),
             $options
         );
-    }
-
-    /**
-     * getAssembledParams(): defined by RouteInterface interface.
-     *
-     * @see    RouteInterface::getAssembledParams
-     * @return array
-     */
-    public function getAssembledParams()
-    {
-        return $this->assembledParams;
     }
 
     /**

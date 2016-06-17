@@ -10,6 +10,7 @@ namespace ZendTest\Router;
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Router\RoutePluginManager;
 use Zend\ServiceManager\ServiceManager;
+use Zend\Router;
 
 class RoutePluginManagerTest extends TestCase
 {
@@ -28,5 +29,31 @@ class RoutePluginManagerTest extends TestCase
         $route = $routes->get('DummyRoute');
 
         $this->assertInstanceOf('ZendTest\Router\TestAsset\DummyRoute', $route);
+    }
+
+    public function testPrototypes()
+    {
+        $pluginManager = new RoutePluginManager(new ServiceManager(), [
+            'prototypes' => [
+                'foo' => [
+                    Router\Http\Literal::class,
+                    'route' => '/foo-route',
+                ]
+            ]
+        ]);
+        $pluginManager->setPrototype('bar', [
+            Router\Http\Literal::class,
+            'route' => '/bar-route',
+        ]);
+
+        $foo = $pluginManager->get('foo');
+        $this->assertInstanceOf(Router\Http\Literal::class, $foo);
+        $this->assertEquals('/foo-route', $this->readAttribute($foo, 'route'));
+        $this->assertSame($foo, $pluginManager->get('foo'));
+
+        $bar = $pluginManager->get('bar');
+        $this->assertInstanceOf(Router\Http\Literal::class, $bar);
+        $this->assertEquals('/bar-route', $this->readAttribute($bar, 'route'));
+        $this->assertSame($bar, $pluginManager->get('bar'));
     }
 }

@@ -5,7 +5,7 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Zend\Router\Http;
+namespace Zend\Router;
 
 use Zend\I18n\Translator\TranslatorInterface as Translator;
 use Zend\I18n\Translator\TranslatorAwareInterface;
@@ -15,7 +15,7 @@ use Zend\Stdlib\RequestInterface as Request;
 /**
  * Translator aware tree route stack.
  */
-class TranslatorAwareTreeRouteStack extends TreeRouteStack implements TranslatorAwareInterface
+class TranslatorAwareRootRouteStack extends TreeRouteStack implements TranslatorAwareInterface
 {
     /**
      * Translator used for translatable segments.
