@@ -1285,4 +1285,86 @@ class RouteStackTest extends TestCase
 
         $this->assertSame($pluginManager, $stack->getRoutePluginManager());
     }
+
+    public function testDependency()
+    {
+        $this->routePluginManager->setInvokableClass('callBack', TestAsset\CallBackRoute::class);
+        $route = RouteStack::factory([
+            'routes' => [
+                'foo' => [
+                    'router' => [
+                        'segment',
+                        'route' => '/:foo',
+                    ],
+                    'chains' => [
+                        [
+                            'callBack',
+                            'match_CallBack' => function (Request $request, $pathOffset = null, array $options = []) {
+                                if (!isset($options['match'])) {
+                                    return;
+                                }
+                                return new Router\Http\RouteMatch([
+                                    'foo-2' => $options['match']->getParam('foo') . '+dependency',
+                                ]);
+                            },
+                            'assemble_CallBack' => function (array $params = [], array $options = []) {
+                                if (!isset($options['params'])) {
+                                    return;
+                                }
+                                return '/' . $options['params']['foo'] . '+dependency';
+                            },
+                        ],
+                    ],
+                    'routes' => [
+                        'bar' => [
+                            'router' => [
+                                'segment',
+                                'route' => '/:bar',
+                            ],
+                            'routes' => [
+                                'baz' => ['router' => [
+                                    'callBack',
+                                    'match_CallBack' => function (Request $request, $pathOffset = null, array $options = []) {
+                                        if (!isset($options['match'])) {
+                                            return;
+                                        }
+                                        return new Router\Http\RouteMatch([
+                                            'bar-2' => $options['match']->getParam('bar') . '+dependency',
+                                        ], strlen($request->getUri()->getPath()) - $pathOffset);
+                                    },
+                                    'assemble_CallBack' => function (array $params = [], array $options = []) {
+                                        if (!isset($options['params'])) {
+                                            return;
+                                        }
+                                        return '/' . $options['params']['bar'] . '+dependency';
+                                    },
+                                ]],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'route_plugins' => $this->routePluginManager
+        ]);
+
+        $request = new Request;
+        $request->setUri('https://localhost/v1/v2');
+
+        $actualMatch = $route->match($request);
+        $this->assertEquals(
+            [
+                'foo'   => 'v1',
+                'foo-2' => 'v1+dependency',
+                'bar'   => 'v2',
+                'bar-2' => 'v2+dependency',
+            ],
+            $actualMatch->getParams()
+        );
+
+        $assembleActual = $route->assemble([
+            'foo' => 'v1',
+            'bar' => 'v2'
+        ], ['name' => 'foo/bar/baz']);
+        $this->assertEquals('/v1/v1+dependency/v2/v2+dependency', $assembleActual);
+    }
 }

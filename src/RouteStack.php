@@ -108,6 +108,10 @@ class RouteStack implements RouteStackInterface
             $options['locale'] = $params['locale'];
         }
 
+        if (!isset($options['params'])) {
+            $options['params'] = $params;
+        }
+
         if ($this->router) {
             $path .= $this->getRouter()->assemble($params, $options);
             $this->assembledParams = array_merge($this->assembledParams, $this->getRouter()->getAssembledParams());
@@ -147,7 +151,12 @@ class RouteStack implements RouteStackInterface
                 throw new Exception\RuntimeException(sprintf('Route with name "%s" not found', $name));
             }
 
-            $path .= $route->assemble(array_merge($this->defaults, $params), $options);
+            $params = array_merge($this->defaults, $params);
+            if (!isset($options['params'])) {
+                $options['params'] = $params;
+            }
+
+            $path .= $route->assemble($params, $options);
             $this->assembledParams = array_merge($this->assembledParams, $route->getAssembledParams());
         }
 
@@ -181,6 +190,7 @@ class RouteStack implements RouteStackInterface
             if (!$match) {
                 return;
             }
+            $options['match'] = $match;
             $nextOffset += $match->getLength();
         }
 
@@ -233,6 +243,7 @@ class RouteStack implements RouteStackInterface
             if (!$childMatch) {
                 return;
             }
+            $options['match'] = $match;
         }
 
         if ($match) {
