@@ -87,6 +87,7 @@ class RoutePluginManager extends AbstractPluginManager
                 'Wildcard' => Http\Wildcard::class,
                 'wildCard' => Http\Wildcard::class,
                 'WildCard' => Http\Wildcard::class,
+                'NestedStack' => NestedStack::class,
             ],
             'factories' => [
                 Http\Chain::class    => RouteInvokableFactory::class,
@@ -98,7 +99,7 @@ class RoutePluginManager extends AbstractPluginManager
                 Http\Scheme::class   => RouteInvokableFactory::class,
                 Http\Segment::class  => RouteInvokableFactory::class,
                 Http\Wildcard::class => RouteInvokableFactory::class,
-
+                NestedStack::class => NestedStackFactory::class,
                 // v2 normalized names
 
                 'zendmvcrouterhttpchain'    => RouteInvokableFactory::class,
