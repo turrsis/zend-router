@@ -55,6 +55,7 @@ class Segment extends AbstractRoute
         '%40' => "@", // pchar
 //      '%5F' => "_", // unreserved - not touched by rawurlencode
 //      '%7E' => "~", // unreserved - not touched by rawurlencode
+        '%2F' => "/", // ???
     ];
 
     /**
